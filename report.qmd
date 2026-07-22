@@ -1,0 +1,15 @@
+# Executive recommendation
+
+# Analysis journey
+
+# PK/PD findings
+
+# Population and subgroup findings
+
+# Dosing recommendation
+
+# Diagnostics and uncertainty
+
+# Clinical implementation
+
+# Validation needs and limitations

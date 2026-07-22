@@ -1,0 +1,1 @@
+"""Report-writing agent placeholder."""
