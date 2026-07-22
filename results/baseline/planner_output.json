@@ -1,23 +1,146 @@
 {
-  "proposed_model": "One-compartment model",
+  "proposed_model": {
+    "pk_structure": "One-compartment linear model with first-order elimination",
+    "equation": "dA/dt = -CL/V * A; C(t) = Dose/V * exp(-CL/V * t)",
+    "parameters": [
+      "CL (clearance)",
+      "V (volume of distribution)"
+    ],
+    "random_effects": "Log-normal IIV on CL and V",
+    "residual_error": "Proportional error model on concentrations",
+    "rationale": "Rapid turnaround, adequate for single-dose IV bolus; escalate to two-compartment only if one-compartment fails convergence or shows systematic bias in terminal phase"
+  },
   "covariates_to_test": [
-    "Renal function (eGFR)",
-    "Genotype"
+    {
+      "covariate": "Renal function (eGFR or creatinine clearance)",
+      "parameter": "CL",
+      "model": "Power law: CLi = CLpop * (eGFRi/eGFRmedian)^\u03b8",
+      "priority": "Primary",
+      "rationale": "Standard immunotherapy clearance driver; test continuous form first"
+    },
+    {
+      "covariate": "Genotype (if available; e.g., CYP3A4, transporter variants)",
+      "parameter": "CL",
+      "model": "Categorical: CLi = CLpop * exp(\u03b8genotype)",
+      "priority": "Primary",
+      "rationale": "Expected metabolic heterogeneity; binary or multi-level indicator"
+    },
+    {
+      "covariate": "Body weight",
+      "parameter": "V",
+      "model": "Allometric: Vi = Vpop * (BWi/BWmedian)^0.75",
+      "priority": "Secondary",
+      "rationale": "Standard physiological scaling; test if IIV on V remains high after renal/genotype adjustment"
+    },
+    {
+      "covariate": "Age",
+      "parameter": "CL",
+      "model": "Linear or exponential; test after renal function (may be redundant)",
+      "priority": "Exploratory",
+      "rationale": "Screen for independent age effect after controlling for eGFR"
+    },
+    {
+      "covariate": "Collection site",
+      "parameter": "None (operational metadata)",
+      "model": "Retain as stratification factor for sensitivity analysis only",
+      "priority": "Tertiary",
+      "rationale": "Per instructions: treat as operational unless raw data values are implausible (e.g., negative concentrations, impossible times)"
+    }
   ],
   "validation_checks": [
-    "Convergence of model parameters",
-    "Visual inspection of goodness-of-fit plots (observed vs predicted concentrations)",
-    "Residual plots to check for homoscedasticity"
+    {
+      "check": "One-compartment convergence and stability",
+      "method": "Evaluate minimization message, condition number, standard errors <30% for primary parameters",
+      "threshold": "OFV decrease >3.84 (\u03c7\u00b2 1 df) vs. null; all parameters estimated with <50% RSE",
+      "action_if_fail": "Escalate to two-compartment model or investigate data quality"
+    },
+    {
+      "check": "Goodness-of-fit diagnostics",
+      "method": "Observed vs. population predictions (OFVpop); observed vs. individual predictions (OFVind); residuals vs. time and concentration",
+      "threshold": "No systematic bias in residual plots; mean OFVpop and OFVind near zero; RMSE <20% of observed range",
+      "action_if_fail": "Revise residual error model (add exponential component); check for outliers"
+    },
+    {
+      "check": "Covariate significance testing",
+      "method": "Likelihood ratio test (LRT): \u0394OFV \u2265 3.84 for single covariate (p\u22480.05); \u0394OFV \u2265 2.71 for removal (p\u22480.10, forward-backward)",
+      "threshold": "Retain covariates with \u0394OFV \u2265 3.84; apply automated forward/backward elimination",
+      "action_if_fail": "Exclude non-significant covariate; document in sensitivity analysis"
+    },
+    {
+      "check": "Outlier and influential observation detection",
+      "method": "Cook's distance, DFBETAS, or weighted residuals |>2.5 SD|",
+      "threshold": "Flag observations with |weighted residuals| >3.0 for review",
+      "action_if_fail": "Investigate source; retain in primary but report sensitivity analysis with exclusion"
+    },
+    {
+      "check": "Bootstrap and visual predictive check (VPC)",
+      "method": "1000 bootstrap replicates for parameter confidence intervals; VPC with 1000 simulations stratified by dose/weight/eGFR if covariates present",
+      "threshold": "Bootstrap 95% CI includes population estimate; observed percentiles (5th, 50th, 95th) within simulated prediction bands",
+      "action_if_fail": "Investigate model misspecification or sparse data within strata; consider pooling categories"
+    },
+    {
+      "check": "Exposure-response (PK/PD) linkage",
+      "method": "Plot individual Cmax/AUC vs. efficacy (e.g., biomarker change, response rate) and safety (adverse event incidence)",
+      "threshold": "Visual separation of exposure quartiles; sigmoidal or logistic dose-response model \u0394OFV >3.84 vs. null",
+      "action_if_fail": "Report exposure ranges with observed outcomes; acknowledge limited ER resolution if sparse"
+    }
   ],
   "decision_thresholds": {
-    "clearance_cutoff": "Statistically significant correlation with eGFR and genotype",
-    "exposure_efficacy_threshold": "Determined by EC50 from exposure-response analysis",
-    "adverse_event_threshold": "Established from dose-response relationship for safety endpoints"
+    "efficacy_exposure": {
+      "metric": "Target AUC or Cmax range",
+      "method": "Fit sigmoidal Emax model to efficacy biomarker or response vs. individual exposure; estimate EC50 and EC90",
+      "threshold_action": "Define 'adequate efficacy' as exposure \u2265EC50; 'maximal efficacy' as \u2265EC90; recommend dosing to achieve median population AUC/Cmax in efficacy range"
+    },
+    "safety_exposure": {
+      "metric": "Adverse event rate by exposure quartile",
+      "method": "Logistic regression: AE incidence vs. exposure (Cmax/AUC); estimate exposure threshold for clinically acceptable toxicity (<Grade 2 or <20% incidence)",
+      "threshold_action": "Define upper exposure boundary as concentration at which AE risk exceeds target (e.g., >30% Grade \u22652); cap individual CL adjustments to stay below this limit"
+    },
+    "subgroup_dosing_rules": {
+      "method": "Stratify population by significant covariates (e.g., eGFR categories, genotype); calculate median CL and required dose adjustment multiplier relative to standard population",
+      "example": "eGFR >90: no adjustment; eGFR 60\u201389: 0.85\u00d7 standard dose; eGFR 30\u201359: 0.70\u00d7 standard dose; eGFR <30: specialist review",
+      "threshold_action": "Recommend dose reduction if predicted exposure (AUC/Cmax) falls below efficacy threshold or exceeds safety threshold for subgroup"
+    },
+    "model_selection": {
+      "criterion": "Use one-compartment if OFVone-comp is <2.71 units higher than two-compartment; otherwise adopt two-compartment",
+      "justification": "Rapid turnaround prioritized; parsimonious model acceptable for dosing guidance unless terminal phase data strongly favor complexity"
+    }
   },
   "planned_report_outputs": [
-    "Population PK parameter estimates and confidence intervals",
-    "Exposure-response relationships for efficacy and adverse events",
-    "Subgroup dosing rules based on identified covariates",
-    "Summary of diagnostics and model validation results"
+    {
+      "output": "Population PK parameter estimates with uncertainty",
+      "format": "Table: CL (L/h), V (L), IIV (%), RSE (%); Bootstrap 95% CI",
+      "audience": "Regulatory and clinical teams"
+    },
+    {
+      "output": "Covariate effects table",
+      "format": "Table: Covariate, parameter, effect size, \u0394OFV, p-value, interpretation (e.g., 'Each 10 mL/min increase in eGFRCL increases by 5%')",
+      "audience": "Pharmacometricians and clinicians"
+    },
+    {
+      "output": "Exposure-response summary",
+      "format": "Plots and table: Efficacy biomarker and safety incidence vs. AUC/Cmax quartiles; EC50, Emax, toxicity threshold with 95% CI",
+      "audience": "Clinical pharmacology and medical affairs"
+    },
+    {
+      "output": "Dosing recommendations by subgroup",
+      "format": "Table and nomogram: Recommended dose (or dose multiplier) by eGFR category, genotype, and bodyweight; corresponding predicted median and 10th\u201390th percentile AUC/Cmax for each subgroup",
+      "audience": "Clinical and regulatory teams; investigator briefing"
+    },
+    {
+      "output": "Goodness-of-fit diagnostics",
+      "format": "Four-panel plot (OFVpop vs. population prediction, OFVind vs. individual prediction, weighted residuals vs. time, weighted residuals vs. prediction); VPC plot stratified by primary covariate",
+      "audience": "Pharmacometricians; CSR/regulatory submission"
+    },
+    {
+      "output": "Model validation summary",
+      "format": "Brief text: Convergence status, bootstrap summary (median and 95% CI for each parameter), VPC interpretation, outlier flagging and sensitivity analysis results",
+      "audience": "All stakeholders"
+    },
+    {
+      "output": "Sensitivity analyses",
+      "format": "One-way tables: Effect on parameter estimates and dosing recommendations of excluding suspected outliers, dropping non-significant covariates, and switching to two-compartment model (if applicable)",
+      "audience": "Pharmacometricians and regulatory"
+    }
   ]
 }

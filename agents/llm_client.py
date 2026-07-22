@@ -16,7 +16,7 @@ load_dotenv()
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 LOG_PATH = PROJECT_ROOT / "logs" / "llm_calls.jsonl"
 DEFAULT_OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-DEFAULT_MODEL = "anthropic/claude-3.5-haiku"
+DEFAULT_MODEL = "anthropic/claude-haiku-4.5"
 
 
 def _model_schema(response_model: Type[BaseModel]) -> Dict[str, Any]:
@@ -167,7 +167,15 @@ def call_structured(
     system_with_schema = f"{system_prompt}\n\n{schema_instruction}"
 
     def parse_structured(response_content: str) -> BaseModel:
-        payload = json.loads(response_content)
+        stripped = response_content.strip()
+        if stripped.startswith("```"):
+            lines = stripped.split("\n")
+            if lines[0].startswith("```"):
+                lines = lines[1:]
+            if lines and lines[-1].strip() == "```":
+                lines = lines[:-1]
+            stripped = "\n".join(lines).strip()
+        payload = json.loads(stripped)
         return _validate_model(response_model, payload)
 
     def structured_correction(error_message: str) -> str:
