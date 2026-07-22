@@ -19,6 +19,7 @@ from pipeline.validation import raise_if_errors, validate
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 ANALYSIS_SUMMARY_PATH = PROJECT_ROOT / "results" / "final" / "analysis_summary.json"
+PARTNER_REPORT_PATH = PROJECT_ROOT / "results" / "final" / "partner_report.md"
 
 
 def _input_file_paths(resolved_data_dir: str) -> List[str]:
@@ -44,7 +45,10 @@ def _serialize_summary(summary: AnalysisSummary) -> str:
     return summary.json(indent=2)
 
 
-def run_analysis(run_id: Optional[str] = None) -> AnalysisSummary:
+def run_analysis(
+    run_id: Optional[str] = None,
+    run_agents: bool = True,
+) -> AnalysisSummary:
     """Run all core analytical stages and persist an ``AnalysisSummary``."""
     effective_run_id = run_id or datetime.now(timezone.utc).strftime(
         "run_%Y%m%d_%H%M%S"
@@ -128,6 +132,31 @@ def run_analysis(run_id: Optional[str] = None) -> AnalysisSummary:
         _serialize_summary(analysis_summary) + "\n",
         encoding="utf-8",
     )
+    produced_files = ["results/final/analysis_summary.json"]
+
+    if run_agents:
+        try:
+            from agents.orchestrator import run_reviewed_report
+
+            report, reviewer_decision, release_decision = run_reviewed_report(
+                analysis_summary,
+                effective_run_id,
+            )
+            PARTNER_REPORT_PATH.write_text(report, encoding="utf-8")
+            produced_files.extend(
+                [
+                    "results/final/release_decision.json",
+                    "results/final/partner_report.md",
+                ]
+            )
+            print("Reviewer status: {}".format(reviewer_decision.status))
+            print("Release decision: {}".format(release_decision.decision))
+        except Exception as exc:
+            print(
+                "WARNING: Agent pipeline failed, continuing with analytical "
+                "results only: {}".format(exc),
+                file=sys.stderr,
+            )
 
     material_count = sum(
         effect.clinically_material for effect in covariate_effects
@@ -140,6 +169,7 @@ def run_analysis(run_id: Optional[str] = None) -> AnalysisSummary:
     print("Dosing recommendations by action: {}".format(dict(action_counts)))
     print("EDA: {}".format("succeeded" if eda_succeeded else "skipped"))
     print("Saved analysis summary: {}".format(ANALYSIS_SUMMARY_PATH))
+    print("Produced files: {}".format(produced_files))
 
     return analysis_summary
 
