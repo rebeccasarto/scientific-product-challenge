@@ -1,7 +1,43 @@
 {
-  "run_id": "run_20260722_031930",
-  "generated_at": "2026-07-22T03:24:00.008101Z",
-  "status": "approve",
-  "findings": [],
-  "reviewer_notes": "The report provides clear dosing recommendations for the overall population and specified subgroups, backed by statistically significant covariate effects. Key findings are presented concisely, allowing for easy executive scanning. Limitations are acknowledged, and further validation work is suggested. Overall, it meets all the approval criteria with actionable insights."
+  "run_id": "baseline-run",
+  "generated_at": "2026-07-22T04:31:01.202699Z",
+  "status": "revise",
+  "findings": [
+    {
+      "severity": "critical",
+      "category": "diagnostics",
+      "issue": "PK model failed predictive check; patient-level aggregate median predictions not within 20% of observed at all timepoints",
+      "evidence": "Diagnostic flags report: 'Patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint' and critical_flags array confirms predictive_check_passed=false with major_residual_bias=true",
+      "required_action": "Add explicit statement in the report's main findings or Executive Summary that the model fit is imperfect and may underestimate uncertainty in dose recommendations. This must appear before or alongside the dosing recommendation."
+    },
+    {
+      "severity": "major",
+      "category": "reporting",
+      "issue": "Upper weight quartile subgroup recommendation lacks actionable guidance",
+      "evidence": "The dosing_recommendations for 'patients in the upper weight quartile' specifies action='insufficient_evidence' with null recommended_dose_mg, but provides no quantitative guidance (e.g., estimated dose increase if full NLME were performed)",
+      "required_action": "Either: (a) add a point-estimate of suggested dose adjustment (e.g., '~110–115 mg based on 30.2% CL increase, pending simulation confirmation') to make the recommendation actionable for clinicians, OR (b) clarify in the narrative that this subgroup should remain on 100 mg pending further study, not be withheld treatment pending simulation."
+    },
+    {
+      "severity": "major",
+      "category": "reporting",
+      "issue": "Inconsistent terminology: 'clinically_material' vs. '>= 20% threshold' criterion not explicitly stated in main text",
+      "evidence": "Covariate effects table marks weight effects as clinically_material=true (30.2% and 30.8% changes), but creatinine clearance (9.3%) and genotype (9.9% decrease) are marked clinically_material=false despite having p < 0.05. The report does not state upfront that '>= 20% change' is the threshold for clinical materiality.",
+      "required_action": "Add a sentence in the Covariate Effects section explicitly stating: 'Clinical materiality was prespecified as a ≥20% parameter change across the interquartile or allele range; statistical significance alone does not indicate clinical materiality.'"
+    },
+    {
+      "severity": "minor",
+      "category": "interpretation",
+      "issue": "AIC/BIC values are null for both PK model candidates, limiting objective model selection transparency",
+      "evidence": "Both 1-compartment and 2-compartment model entries have aic=null and bic=null. Selection rationale relies on patient-level delta-AICc distributions (32.9% with 2-compartment AICc >4 points lower), but population-level comparison statistics are unavailable.",
+      "required_action": null
+    },
+    {
+      "severity": "minor",
+      "category": "diagnostics",
+      "issue": "Exposure-response models show broad confidence intervals for safety endpoint; CI overlaps 0 for both univariate and weight-adjusted models",
+      "evidence": "Grade ≥2 adverse event univariate safety log-odds CI: [-0.001765, 0.005141]; weight-adjusted: [-0.001633, 0.007249]. Neither excludes a null effect.",
+      "required_action": null
+    }
+  ],
+  "reviewer_notes": "The report contains a clear overall recommendation (maintain 100 mg current dose) supported by efficacy exposure-response data and a non-significant safety signal. The weight covariate effect is quantitatively material (30% CL increase) but the action for the upper weight quartile is vague ('insufficient_evidence' with no suggested alternative dose). CRITICAL ISSUE: The PK model failed a basic predictive check (residual bias, ≥20% deviation from observed medians). This must be prominently flagged in the main findings and dosing rationale so that users understand the confidence bound. The report also needs explicit statement of the ≥20% clinical-materiality threshold to justify why 9.3% and 9.9% effects do not trigger subgroup adjustments. Request revision to (1) add a prominent diagnostic limitation statement about predictive check failure, (2) clarify the clinical-materiality definition, and (3) either propose a ballpark adjusted dose for heavy patients or explicitly state they should remain on standard dose pending further study. The limitations section is present and thorough, but does not specifically mention the predictive check failure."
 }
