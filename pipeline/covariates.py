@@ -84,7 +84,12 @@ def screen_covariates(
     ]
     analysis_data = selected_fits.merge(
         patients[
-            ["patient_id", "weight_kg", "creatinine_clearance_ml_min"]
+            [
+                "patient_id",
+                "weight_kg",
+                "creatinine_clearance_ml_min",
+                "genotype",
+            ]
         ],
         on="patient_id",
         how="inner",
@@ -101,6 +106,18 @@ def screen_covariates(
     )
     crcl_q75 = float(
         analysis_data["creatinine_clearance_ml_min"].quantile(0.75)
+    )
+    observed_genotypes = set(analysis_data["genotype"].dropna().astype(str))
+    allowed_genotypes = {"WT/WT", "WT/MUT", "MUT/MUT"}
+    additional_genotypes = observed_genotypes - allowed_genotypes
+    if additional_genotypes:
+        raise ValueError(
+            "Genotype covariate screening supports only WT/WT, WT/MUT, and "
+            "MUT/MUT; unsupported observed genotype category/categories: "
+            + ", ".join(sorted(additional_genotypes))
+        )
+    allele_count = analysis_data["genotype"].map(
+        {"WT/WT": 0.0, "WT/MUT": 1.0, "MUT/MUT": 2.0}
     )
     effects: List[CovariateEffect] = []
 
@@ -161,6 +178,42 @@ def screen_covariates(
                     "creatinine clearance",
                     parameter_name,
                     crcl_ratio,
+                ),
+            )
+        )
+
+        genotype_estimate, genotype_ci_lower, genotype_ci_upper, genotype_p_value = (
+            _fit_regression(allele_count, analysis_data[parameter_name])
+        )
+        genotype_confidence_interval = (genotype_ci_lower, genotype_ci_upper)
+        per_allele_percent_difference = (exp(genotype_estimate) - 1.0) * 100.0
+        full_range_percent_difference = (exp(genotype_estimate * 2.0) - 1.0) * 100.0
+        genotype_ci_excludes_zero = genotype_ci_lower > 0 or genotype_ci_upper < 0
+        genotype_direction = (
+            "higher" if per_allele_percent_difference >= 0 else "lower"
+        )
+        effects.append(
+            CovariateEffect(
+                covariate="genotype",
+                parameter_affected=parameter_name,
+                effect_form="log_scale_per_mutant_allele",
+                effect_estimate=genotype_estimate,
+                reference_value=0,
+                comparison_value=2,
+                confidence_interval=genotype_confidence_interval,
+                p_value=genotype_p_value,
+                clinically_material=(
+                    genotype_ci_excludes_zero
+                    and abs(full_range_percent_difference) >= 20.0
+                ),
+                interpretation=(
+                    "Exploratory two-stage association: each additional mutant "
+                    f"allele is associated with approximately "
+                    f"{abs(per_allele_percent_difference):.1f}% "
+                    f"{genotype_direction} {parameter_name}; comparing homozygous "
+                    "wild-type to homozygous mutant implies an approximate "
+                    f"{abs(full_range_percent_difference):.1f}% difference; not a "
+                    "definitive population PK covariate effect."
                 ),
             )
         )
