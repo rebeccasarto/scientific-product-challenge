@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "run_id": "run_20260722_182203",
-  "generated_at": "2026-07-22T18:22:12.134610Z",
+  "run_id": "run_20260722_183717",
+  "generated_at": "2026-07-22T18:37:29.524883Z",
   "input_files": [
     "data/patients.csv",
     "data/pk_concentrations.csv",
@@ -14,17 +14,17 @@
         "converged": true,
         "parameters": {
           "CL": {
-            "estimate": 0.3804555148204753,
+            "estimate": 0.380455514820475,
             "standard_error": null,
-            "ci_lower": 0.29842466334977225,
-            "ci_upper": 0.45418577923333325,
+            "ci_lower": 0.298424663349772,
+            "ci_upper": 0.4541857792333329,
             "unit": "L/h"
           },
           "V": {
             "estimate": 4.6344944448624155,
             "standard_error": null,
-            "ci_lower": 3.808158496289189,
-            "ci_upper": 5.7191950501989,
+            "ci_lower": 3.808158457927093,
+            "ci_upper": 5.719195050198902,
             "unit": "L"
           }
         },
@@ -62,14 +62,14 @@
       "covariate": "weight_kg",
       "parameter_affected": "CL",
       "effect_form": "allometric_exponent",
-      "effect_estimate": 0.7905078060981117,
+      "effect_estimate": 0.790507806197961,
       "reference_value": 61.89783350355172,
       "comparison_value": 86.43757235241652,
       "confidence_interval": [
-        0.6718444779829542,
-        0.9091711342132691
+        0.671844478105273,
+        0.909171134290649
       ],
-      "p_value": 9.613642395433825e-30,
+      "p_value": 9.613642092257164e-30,
       "clinically_material": true,
       "interpretation": "Exploratory two-stage association: across the interquartile range of weight, CL increases by approximately 30.2%; not a definitive population PK covariate effect."
     },
@@ -77,14 +77,14 @@
       "covariate": "creatinine_clearance_ml_min",
       "parameter_affected": "CL",
       "effect_form": "linear_coefficient_per_10_ml_min_on_log_scale",
-      "effect_estimate": 0.032785891757627125,
+      "effect_estimate": 0.032785891702935,
       "reference_value": 74.53142045700994,
       "comparison_value": 101.53775891191586,
       "confidence_interval": [
-        0.016405099256685658,
-        0.04916668425856859
+        0.01640509920123132,
+        0.04916668420463868
       ],
-      "p_value": 0.00011451058826457129,
+      "p_value": 0.00011451059126749479,
       "clinically_material": false,
       "interpretation": "Exploratory two-stage association: across the interquartile range of creatinine clearance, CL increases by approximately 9.3%; not a definitive population PK covariate effect."
     },
@@ -92,14 +92,14 @@
       "covariate": "genotype",
       "parameter_affected": "CL",
       "effect_form": "log_scale_per_mutant_allele",
-      "effect_estimate": -0.05196272258331335,
+      "effect_estimate": -0.051962722559788586,
       "reference_value": 0.0,
       "comparison_value": 2.0,
       "confidence_interval": [
-        -0.11011542481498279,
-        0.006189979648356096
+        -0.11011542478840404,
+        0.006189979668826867
       ],
-      "p_value": 0.08117024783265857,
+      "p_value": 0.08117024795359738,
       "clinically_material": false,
       "interpretation": "Exploratory two-stage association: each additional mutant allele is associated with approximately 5.1% lower CL; comparing homozygous wild-type to homozygous mutant implies an approximate 9.9% difference; not a definitive population PK covariate effect."
     },
@@ -107,14 +107,14 @@
       "covariate": "weight_kg",
       "parameter_affected": "V",
       "effect_form": "allometric_exponent",
-      "effect_estimate": 0.8032246099985614,
+      "effect_estimate": 0.80322461021183,
       "reference_value": 61.89783350355172,
       "comparison_value": 86.43757235241652,
       "confidence_interval": [
-        0.7121904300763473,
-        0.8942587899207755
+        0.7121904303128348,
+        0.8942587901108252
       ],
-      "p_value": 5.992240257877038e-44,
+      "p_value": 5.992239843095825e-44,
       "clinically_material": true,
       "interpretation": "Exploratory two-stage association: across the interquartile range of weight, V increases by approximately 30.8%; not a definitive population PK covariate effect."
     },
@@ -122,14 +122,14 @@
       "covariate": "creatinine_clearance_ml_min",
       "parameter_affected": "V",
       "effect_form": "linear_coefficient_per_10_ml_min_on_log_scale",
-      "effect_estimate": 0.000015066672376537537,
+      "effect_estimate": 0.00001506657922790515,
       "reference_value": 74.53142045700994,
       "comparison_value": 101.53775891191586,
       "confidence_interval": [
-        -0.014853049584103706,
-        0.014883182928856781
+        -0.014853049677771684,
+        0.014883182836227494
       ],
-      "p_value": 0.9984169265979517,
+      "p_value": 0.998416936385233,
       "clinically_material": false,
       "interpretation": "Exploratory two-stage association: across the interquartile range of creatinine clearance, V increases by approximately 0.0%; not a definitive population PK covariate effect."
     },
@@ -137,14 +137,14 @@
       "covariate": "genotype",
       "parameter_affected": "V",
       "effect_form": "log_scale_per_mutant_allele",
-      "effect_estimate": -0.08294271665301295,
+      "effect_estimate": -0.0829427166145189,
       "reference_value": 0.0,
       "comparison_value": 2.0,
       "confidence_interval": [
-        -0.1333359987700112,
-        -0.032549434536014686
+        -0.1333359987343716,
+        -0.03254943449466618
       ],
-      "p_value": 0.0014316766665304784,
+      "p_value": 0.001431676674577823,
       "clinically_material": false,
       "interpretation": "Exploratory two-stage association: each additional mutant allele is associated with approximately 8.0% lower V; comparing homozygous wild-type to homozygous mutant implies an approximate 15.3% difference; not a definitive population PK covariate effect."
     }
@@ -158,9 +158,9 @@
       "converged": true,
       "n_patients": 240,
       "n_events": 157,
-      "effect_estimate": 0.008048405813233406,
-      "ci_lower": 0.004211611166328969,
-      "ci_upper": 0.01188520046013784,
+      "effect_estimate": 0.00804840581211419,
+      "ci_lower": 0.004211611165171881,
+      "ci_upper": 0.011885200459056498,
       "diagnostic_flags": [],
       "key_finding": "Higher exposure is associated with higher odds of clinical response (OR=2.02 per SD increase in AUC, 95% CI [1.44, 2.82]); this is an exploratory association, not a causal or dose-adjustment-ready conclusion on its own."
     },
@@ -172,9 +172,9 @@
       "converged": true,
       "n_patients": 240,
       "n_events": 157,
-      "effect_estimate": 0.007009867922028037,
-      "ci_lower": 0.002374510444942771,
-      "ci_upper": 0.011645225399113302,
+      "effect_estimate": 0.007009867920096588,
+      "ci_lower": 0.0023745104421881596,
+      "ci_upper": 0.011645225398005016,
       "diagnostic_flags": [],
       "key_finding": "Higher exposure is associated with higher odds of clinical response (OR=1.84 per SD increase in AUC, 95% CI [1.23, 2.76]); this is an exploratory association, not a causal or dose-adjustment-ready conclusion on its own."
     },
@@ -186,9 +186,9 @@
       "converged": true,
       "n_patients": 240,
       "n_events": 51,
-      "effect_estimate": 0.0016876934223859638,
-      "ci_lower": -0.0017653486709627785,
-      "ci_upper": 0.005140735515734706,
+      "effect_estimate": 0.0016876934204117047,
+      "ci_lower": -0.0017653486739109179,
+      "ci_upper": 0.005140735514734328,
       "diagnostic_flags": [],
       "key_finding": "Higher exposure is associated with higher odds of grade>=2 adverse events (OR=1.16 per SD increase in AUC, 95% CI [0.86, 1.57]); this is an exploratory association, not a causal or dose-adjustment-ready conclusion on its own."
     },
@@ -200,9 +200,9 @@
       "converged": true,
       "n_patients": 240,
       "n_events": 51,
-      "effect_estimate": 0.002807959592757836,
-      "ci_lower": -0.0016326968063001405,
-      "ci_upper": 0.007248615991815813,
+      "effect_estimate": 0.0028079595898179003,
+      "ci_lower": -0.0016326968105251592,
+      "ci_upper": 0.00724861599016096,
       "diagnostic_flags": [],
       "key_finding": "Higher exposure is associated with higher odds of grade>=2 adverse events (OR=1.28 per SD increase in AUC, 95% CI [0.87, 1.88]); this is an exploratory association, not a causal or dose-adjustment-ready conclusion on its own."
     }

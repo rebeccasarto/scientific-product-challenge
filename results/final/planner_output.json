@@ -11,13 +11,14 @@
   "efficacy_endpoint": "clinical_response",
   "safety_endpoint": "grade2plus_adverse_event",
   "validation_checks": [
-    "Data quality: verify no missing concentration-time pairs, covariate completeness, and endpoint classification consistency",
-    "PK model selection: compare 1- and 2-compartment fits using OFV, AIC, and visual predictive checks; confirm parameter identifiability",
-    "Covariate screening: test weight_kg, creatinine_clearance_ml_min, and genotype individually on PK parameters; document effect sizes and statistical significance",
-    "Exposure-response relationship: confirm AUC derivation from selected PK model and assess linearity of clinical_response and grade2plus_adverse_event against AUC",
-    "Predictive performance: generate posterior predictive checks for PK concentrations and compare observed vs. model-predicted efficacy and safety rates by AUC quartile",
-    "Uncertainty quantification: report parameter estimates with 95% confidence intervals and sensitivity analysis for key covariate effects",
-    "Population heterogeneity: assess residual variability and inter-individual PK variability after covariate adjustment"
+    "Data completeness and integrity check for concentration-time, PD biomarker, efficacy, covariate, and safety records across 240 patients",
+    "PK model fit comparison via OFV and visual predictive checks (VPC) for both 1- and 2-compartment models",
+    "Covariate effect screening: assess material covariate relationships to exposure (AUC) for weight_kg, creatinine_clearance_ml_min, and genotype",
+    "Efficacy PD/response model: logistic regression or similar of clinical_response against individual AUC estimates with 95% CI",
+    "Safety PD model: logistic regression or similar of grade2plus_adverse_event against individual AUC estimates with 95% CI",
+    "Predictive performance check: simulate 1000 replicates under final model to verify predictive interval coverage for concentration and response",
+    "Parameter uncertainty quantification: bootstrap or likelihood profiling for all structural and covariate parameters",
+    "Covariate balance check: confirm adequate sample size and exposure range within each covariate stratum to support inference"
   ],
-  "dosing_policy": "Conservative dosing recommendations require both exposure-matched simulation and statistically significant covariate effects from the final PK/PD model. A material covariate identified during screening but lacking exposure-matched simulation or conflicting with efficacy-safety balance will be classified as insufficient evidence; no dose adjustment will be proposed for such covariates. Dosing guidance is limited to the observed dose level (100 mg IV bolus) and target AUC ranges derived from the validated exposure-response analysis."
+  "dosing_policy": "Conservative dosing recommendations will be issued only when PK model selection is definitive, covariate effects on exposure are material and confirmed, and efficacy–safety PD relationships are established with sufficient precision. Any material covariate effect lacking exposure-matched simulation data will result in insufficient evidence for dose adjustment rather than an invented or extrapolated dose recommendation."
 }

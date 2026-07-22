@@ -3,12 +3,13 @@ FROM python:3.9-slim
 WORKDIR /app
 
 ARG QUARTO_VERSION=1.9.38
+ARG TARGETARCH
 
 COPY requirements.txt ./
 RUN apt-get update \
     && apt-get install --no-install-recommends -y ca-certificates curl \
     && curl --fail --location --output /tmp/quarto.deb \
-      "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.deb" \
+      "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-${TARGETARCH}.deb" \
     && apt-get install -y /tmp/quarto.deb \
     && rm -rf /var/lib/apt/lists/* /tmp/quarto.deb \
     && pip install --no-cache-dir -r requirements.txt
