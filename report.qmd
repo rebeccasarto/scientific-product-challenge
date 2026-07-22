@@ -1,15 +1,8 @@
-# Executive recommendation
+---
+title: "PK/PD Analysis: Partner Report"
+format:
+  html:
+    embed-resources: true
+---
 
-# Analysis journey
-
-# PK/PD findings
-
-# Population and subgroup findings
-
-# Dosing recommendation
-
-# Diagnostics and uncertainty
-
-# Clinical implementation
-
-# Validation needs and limitations
+{{< include results/final/partner_report.md >}}
