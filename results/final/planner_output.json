@@ -1,0 +1,23 @@
+{
+  "pk_models_to_compare": [
+    "1-compartment",
+    "2-compartment"
+  ],
+  "covariates_to_test": [
+    "weight_kg",
+    "creatinine_clearance_ml_min",
+    "genotype"
+  ],
+  "efficacy_endpoint": "clinical_response",
+  "safety_endpoint": "grade2plus_adverse_event",
+  "validation_checks": [
+    "PK model selection via OFV, AIC, and visual inspection of goodness-of-fit plots",
+    "Data completeness and outlier assessment for concentration-time, PD biomarker, covariates, and endpoints",
+    "Covariate screening via univariate Wald test (p<0.05 inclusion threshold); retain only covariates with statistically significant exposure relationships",
+    "Predictive check: simulated 90% prediction interval vs observed concentration-time data across dose range",
+    "Predictive check: simulated 90% prediction interval vs observed PD biomarker and endpoint distributions",
+    "Uncertainty quantification via bootstrap resampling (n=200) of point estimates and confidence intervals for PK/PD parameters",
+    "Post-hoc individual parameter estimation and shrinkage assessment for all final model parameters"
+  ],
+  "dosing_policy": "Conservative dosing recommendation derived exclusively from the final PK/PD model fitted to the study population. Any covariate identified as material to exposure without supporting exposure-matched simulation data shall result in a declaration of insufficient evidence for dose adjustment, rather than an invented alternative dose. Recommend fixed 100 mg IV bolus pending accumulation of evidence specific to dose-covariate interactions."
+}

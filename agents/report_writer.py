@@ -23,7 +23,7 @@ from agents.schemas import (
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-REPORT_WRITER_PROMPT_PATH = PROJECT_ROOT / "prompts" / "report_writer.md"
+REPORT_WRITER_PROMPT_PATH = PROJECT_ROOT / "agents" / "prompts" / "report_writer.md"
 REPORT_VALIDATION_LOG_PATH = PROJECT_ROOT / "logs" / "report_validation.jsonl"
 
 _STOPWORDS = {
@@ -181,6 +181,7 @@ def run_report_writer(
     analysis_summary: AnalysisSummary,
     reviewer_decision: ReviewerDecision,
     run_id: str,
+    revision_request: str = "",
 ) -> str:
     """Generate and deterministically validate partner-facing Markdown."""
     system_prompt = REPORT_WRITER_PROMPT_PATH.read_text(encoding="utf-8")
@@ -190,6 +191,11 @@ def run_report_writer(
         "Reviewer decision:\n"
         f"{_model_json(reviewer_decision)}"
     )
+    if revision_request:
+        user_content = "{}\n\nRevision request:\n{}".format(
+            user_content,
+            revision_request,
+        )
     report = call_text(
         system_prompt=system_prompt,
         user_content=user_content,

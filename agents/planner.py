@@ -2,7 +2,7 @@
 
 import sys
 from pathlib import Path
-from typing import Any, List, cast
+from typing import List, Literal, cast
 
 from pydantic import BaseModel, ConfigDict
 
@@ -14,21 +14,26 @@ from agents.llm_client import call_structured
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PLANNER_PROMPT_PATH = PROJECT_ROOT / "prompts" / "analysis_planner.md"
+PLANNER_PROMPT_PATH = PROJECT_ROOT / "agents" / "prompts" / "analysis_planner.md"
 
 
 class PlannerOutput(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    """Constrained planning contract for the prespecified analysis scope."""
 
-    proposed_model: Any
-    covariates_to_test: List[Any]
-    validation_checks: List[Any]
-    decision_thresholds: Any
-    planned_report_outputs: List[Any]
+    model_config = ConfigDict(extra="forbid")
+
+    pk_models_to_compare: List[Literal["1-compartment", "2-compartment"]]
+    covariates_to_test: List[
+        Literal["weight_kg", "creatinine_clearance_ml_min", "genotype"]
+    ]
+    efficacy_endpoint: Literal["clinical_response"]
+    safety_endpoint: Literal["grade2plus_adverse_event"]
+    validation_checks: List[str]
+    dosing_policy: str
 
 
 def run_planner(run_id: str) -> PlannerOutput:
-    """Ask the planner for a pre-analysis plan based only on study context."""
+    """Ask the planner to confirm the bounded, prespecified analysis plan."""
     system_prompt = PLANNER_PROMPT_PATH.read_text(encoding="utf-8")
     user_content = (
         "Plan the analysis for a dataset with 240 patients receiving a single "

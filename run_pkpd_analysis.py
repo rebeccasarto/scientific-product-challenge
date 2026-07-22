@@ -10,6 +10,7 @@ import tempfile
 from typing import List, Optional
 
 from agents.schemas import AnalysisSummary
+from agents.planner import PlannerOutput, run_planner
 from pipeline.covariates import screen_covariates
 from pipeline.data_loading import load_all
 from pipeline.diagnostics import summarize_diagnostics
@@ -24,6 +25,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 ANALYSIS_SUMMARY_PATH = PROJECT_ROOT / "results" / "final" / "analysis_summary.json"
 PARTNER_REPORT_PATH = PROJECT_ROOT / "results" / "final" / "partner_report.md"
 RENDERED_REPORT_PATH = PROJECT_ROOT / "results" / "final" / "report.html"
+PLANNER_OUTPUT_PATH = PROJECT_ROOT / "results" / "final" / "planner_output.json"
 
 
 def _render_partner_report() -> None:
@@ -74,6 +76,25 @@ def _serialize_summary(summary: AnalysisSummary) -> str:
     return summary.json(indent=2)
 
 
+def _serialize_model(model: object) -> str:
+    """Serialize Pydantic v1/v2 planning output without losing structure."""
+    if hasattr(model, "model_dump_json"):
+        return model.model_dump_json(indent=2)  # type: ignore[union-attr]
+    return model.json(indent=2)  # type: ignore[union-attr]
+
+
+def _validate_planner_scope(plan: PlannerOutput) -> None:
+    """Keep the LLM plan inside the prespecified, reviewable analysis scope."""
+    if set(plan.pk_models_to_compare) != {"1-compartment", "2-compartment"}:
+        raise ValueError("Planner must retain both prespecified PK candidates.")
+    if set(plan.covariates_to_test) != {
+        "weight_kg",
+        "creatinine_clearance_ml_min",
+        "genotype",
+    }:
+        raise ValueError("Planner must retain all prespecified covariates.")
+
+
 def run_analysis(
     run_id: Optional[str] = None,
     run_agents: bool = True,
@@ -86,6 +107,14 @@ def run_analysis(
     loaded = load_all()
     validation_report = validate(loaded)
     raise_if_errors(validation_report)
+
+    analysis_plan = run_planner(effective_run_id)
+    _validate_planner_scope(analysis_plan)
+    PLANNER_OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    PLANNER_OUTPUT_PATH.write_text(
+        _serialize_model(analysis_plan) + "\n",
+        encoding="utf-8",
+    )
 
     pk_comparison, per_patient_pk = fit_population_pk(loaded)
     selected_model = pk_comparison.selected_model
@@ -161,7 +190,10 @@ def run_analysis(
         _serialize_summary(analysis_summary) + "\n",
         encoding="utf-8",
     )
-    produced_files = ["results/final/analysis_summary.json"]
+    produced_files = [
+        "results/final/analysis_summary.json",
+        "results/final/planner_output.json",
+    ]
 
     if run_agents:
         try:

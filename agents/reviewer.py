@@ -23,7 +23,9 @@ from agents.schemas import (
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-REVIEWER_PROMPT_PATH = PROJECT_ROOT / "prompts" / "scientific_reviewer.md"
+REVIEWER_PROMPT_PATH = (
+    PROJECT_ROOT / "agents" / "prompts" / "scientific_reviewer.md"
+)
 REVIEWER_OVERRIDE_LOG_PATH = PROJECT_ROOT / "logs" / "reviewer_overrides.jsonl"
 
 _CONFIDENCE_POLICY_NOTE = (
@@ -423,14 +425,21 @@ def _placeholder_analysis_summary(run_id: str) -> AnalysisSummary:
 def run_reviewer(
     analysis_summary: AnalysisSummary,
     run_id: str,
+    partner_report: Optional[str] = None,
 ) -> ReviewerDecision:
-    """Ask for a decision while retaining local control of its provenance."""
+    """Review evidence, and optionally the report produced from that evidence."""
     system_prompt = REVIEWER_PROMPT_PATH.read_text(encoding="utf-8")
+    user_content = _model_json(analysis_summary)
+    if partner_report is not None:
+        user_content = "AnalysisSummary:\n{}\n\nPartner report:\n{}".format(
+            user_content,
+            partner_report,
+        )
     decision = cast(
         ReviewerDecision,
         call_structured(
             system_prompt=system_prompt,
-            user_content=_model_json(analysis_summary),
+            user_content=user_content,
             response_model=ReviewerDecision,
             run_id=run_id,
             agent_name="reviewer",
@@ -444,7 +453,9 @@ def run_reviewer(
         ReviewerDecision,
         _copy_model(decision, provenance),
     )
-    return validate_review_findings(corrected_decision, analysis_summary)
+    # Findings remain intact. The orchestrator owns a bounded revision cycle;
+    # it must not silently convert a reviewer-requested revision into approval.
+    return corrected_decision
 
 
 if __name__ == "__main__":
