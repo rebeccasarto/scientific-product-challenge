@@ -1,0 +1,23 @@
+{
+  "proposed_model": "One-compartment model",
+  "covariates_to_test": [
+    "Renal function (eGFR)",
+    "Genotype"
+  ],
+  "validation_checks": [
+    "Convergence of model parameters",
+    "Visual inspection of goodness-of-fit plots (observed vs predicted concentrations)",
+    "Residual plots to check for homoscedasticity"
+  ],
+  "decision_thresholds": {
+    "clearance_cutoff": "Statistically significant correlation with eGFR and genotype",
+    "exposure_efficacy_threshold": "Determined by EC50 from exposure-response analysis",
+    "adverse_event_threshold": "Established from dose-response relationship for safety endpoints"
+  },
+  "planned_report_outputs": [
+    "Population PK parameter estimates and confidence intervals",
+    "Exposure-response relationships for efficacy and adverse events",
+    "Subgroup dosing rules based on identified covariates",
+    "Summary of diagnostics and model validation results"
+  ]
+}

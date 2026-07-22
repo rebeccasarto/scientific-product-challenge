@@ -1,0 +1,279 @@
+{
+  "schema_version": "1.0",
+  "run_id": "run_20260722_031930",
+  "generated_at": "2026-07-22T03:19:30.008101Z",
+  "input_files": [
+    "data/patients.csv",
+    "data/pk_concentrations.csv",
+    "data/pd_biomarkers.csv"
+  ],
+  "pk_model": {
+    "candidates": [
+      {
+        "model_type": "1-compartment",
+        "converged": true,
+        "parameters": {
+          "CL": {
+            "estimate": 0.3804555148204753,
+            "standard_error": null,
+            "ci_lower": 0.29842466334977225,
+            "ci_upper": 0.45418577923333325,
+            "unit": "L/h"
+          },
+          "V": {
+            "estimate": 4.6344944448624155,
+            "standard_error": null,
+            "ci_lower": 3.808158496289189,
+            "ci_upper": 5.7191950501989,
+            "unit": "L"
+          }
+        },
+        "aic": null,
+        "bic": null,
+        "diagnostic_flags": [
+          "240/240 patients converged (100.0%)",
+          "0.0% of patients did not converge for 1-compartment model",
+          "Population CL from 240 usable converged fits: median=0.3805, IQR=[0.2984, 0.4542]; ci_lower/ci_upper store between-patient IQR bounds, not a confidence interval",
+          "Population V from 240 usable converged fits: median=4.634, IQR=[3.808, 5.719]; ci_lower/ci_upper store between-patient IQR bounds, not a confidence interval"
+        ],
+        "failure_reason": null
+      },
+      {
+        "model_type": "2-compartment",
+        "converged": true,
+        "parameters": {},
+        "aic": null,
+        "bic": null,
+        "diagnostic_flags": [
+          "240/240 patients converged (100.0%)",
+          "0.0% of patients did not converge for 2-compartment model"
+        ],
+        "failure_reason": null
+      }
+    ],
+    "selected_model": "1-compartment",
+    "selection_rationale": "Among 240 patients with both models converged, 79 (32.9%) had 2-compartment AICc more than 4 points lower with separable alpha/beta; 161 (67.1%) had no clear two-compartment support. Selected 1-compartment because at least 65% cohort support is required for the more complex structure; 1-compartment remains the default when that threshold is not reached.",
+    "diagnostic_flags": [
+      "Paired delta-AICc (1-compartment minus 2-compartment) among 240 patients with both fits converged: median=0.409, IQR=[-4.796, 5.918], delta-AICc > 4 in 32.9%"
+    ]
+  },
+  "covariate_effects": [
+    {
+      "covariate": "weight_kg",
+      "parameter_affected": "CL",
+      "effect_form": "allometric_exponent",
+      "effect_estimate": 0.7905078060981117,
+      "reference_value": 61.89783350355172,
+      "comparison_value": 86.43757235241652,
+      "confidence_interval": [
+        0.6718444779829542,
+        0.9091711342132691
+      ],
+      "p_value": 9.613642395433825e-30,
+      "clinically_material": true,
+      "interpretation": "Exploratory two-stage association: across the interquartile range of weight, CL increases by approximately 30.2%; not a definitive population PK covariate effect."
+    },
+    {
+      "covariate": "creatinine_clearance_ml_min",
+      "parameter_affected": "CL",
+      "effect_form": "linear_coefficient_per_10_ml_min_on_log_scale",
+      "effect_estimate": 0.032785891757627125,
+      "reference_value": 74.53142045700994,
+      "comparison_value": 101.53775891191586,
+      "confidence_interval": [
+        0.016405099256685658,
+        0.04916668425856859
+      ],
+      "p_value": 0.00011451058826457129,
+      "clinically_material": false,
+      "interpretation": "Exploratory two-stage association: across the interquartile range of creatinine clearance, CL increases by approximately 9.3%; not a definitive population PK covariate effect."
+    },
+    {
+      "covariate": "genotype",
+      "parameter_affected": "CL",
+      "effect_form": "log_scale_per_mutant_allele",
+      "effect_estimate": -0.05196272258331335,
+      "reference_value": 0.0,
+      "comparison_value": 2.0,
+      "confidence_interval": [
+        -0.11011542481498279,
+        0.006189979648356096
+      ],
+      "p_value": 0.08117024783265857,
+      "clinically_material": false,
+      "interpretation": "Exploratory two-stage association: each additional mutant allele is associated with approximately 5.1% lower CL; comparing homozygous wild-type to homozygous mutant implies an approximate 9.9% difference; not a definitive population PK covariate effect."
+    },
+    {
+      "covariate": "weight_kg",
+      "parameter_affected": "V",
+      "effect_form": "allometric_exponent",
+      "effect_estimate": 0.8032246099985614,
+      "reference_value": 61.89783350355172,
+      "comparison_value": 86.43757235241652,
+      "confidence_interval": [
+        0.7121904300763473,
+        0.8942587899207755
+      ],
+      "p_value": 5.992240257877038e-44,
+      "clinically_material": true,
+      "interpretation": "Exploratory two-stage association: across the interquartile range of weight, V increases by approximately 30.8%; not a definitive population PK covariate effect."
+    },
+    {
+      "covariate": "creatinine_clearance_ml_min",
+      "parameter_affected": "V",
+      "effect_form": "linear_coefficient_per_10_ml_min_on_log_scale",
+      "effect_estimate": 0.000015066672376537537,
+      "reference_value": 74.53142045700994,
+      "comparison_value": 101.53775891191586,
+      "confidence_interval": [
+        -0.014853049584103706,
+        0.014883182928856781
+      ],
+      "p_value": 0.9984169265979517,
+      "clinically_material": false,
+      "interpretation": "Exploratory two-stage association: across the interquartile range of creatinine clearance, V increases by approximately 0.0%; not a definitive population PK covariate effect."
+    },
+    {
+      "covariate": "genotype",
+      "parameter_affected": "V",
+      "effect_form": "log_scale_per_mutant_allele",
+      "effect_estimate": -0.08294271665301295,
+      "reference_value": 0.0,
+      "comparison_value": 2.0,
+      "confidence_interval": [
+        -0.1333359987700112,
+        -0.032549434536014686
+      ],
+      "p_value": 0.0014316766665304784,
+      "clinically_material": false,
+      "interpretation": "Exploratory two-stage association: each additional mutant allele is associated with approximately 8.0% lower V; comparing homozygous wild-type to homozygous mutant implies an approximate 15.3% difference; not a definitive population PK covariate effect."
+    }
+  ],
+  "exposure_response": [
+    {
+      "endpoint": "clinical_response",
+      "endpoint_type": "efficacy",
+      "model_form": "logistic_univariate",
+      "exposure_metric": "AUC_0_inf",
+      "converged": true,
+      "n_patients": 240,
+      "n_events": 157,
+      "effect_estimate": 0.008048405813233406,
+      "ci_lower": 0.004211611166328969,
+      "ci_upper": 0.01188520046013784,
+      "diagnostic_flags": [],
+      "key_finding": "Higher exposure is associated with higher odds of clinical response (OR=2.02 per SD increase in AUC, 95% CI [1.44, 2.82]); this is an exploratory association, not a causal or dose-adjustment-ready conclusion on its own."
+    },
+    {
+      "endpoint": "clinical_response",
+      "endpoint_type": "efficacy",
+      "model_form": "logistic_weight_adjusted",
+      "exposure_metric": "AUC_0_inf",
+      "converged": true,
+      "n_patients": 240,
+      "n_events": 157,
+      "effect_estimate": 0.007009867922028037,
+      "ci_lower": 0.002374510444942771,
+      "ci_upper": 0.011645225399113302,
+      "diagnostic_flags": [],
+      "key_finding": "Higher exposure is associated with higher odds of clinical response (OR=1.84 per SD increase in AUC, 95% CI [1.23, 2.76]); this is an exploratory association, not a causal or dose-adjustment-ready conclusion on its own."
+    },
+    {
+      "endpoint": "grade2plus_adverse_event",
+      "endpoint_type": "safety",
+      "model_form": "logistic_univariate",
+      "exposure_metric": "AUC_0_inf",
+      "converged": true,
+      "n_patients": 240,
+      "n_events": 51,
+      "effect_estimate": 0.0016876934223859638,
+      "ci_lower": -0.0017653486709627785,
+      "ci_upper": 0.005140735515734706,
+      "diagnostic_flags": [],
+      "key_finding": "Higher exposure is associated with higher odds of grade>=2 adverse events (OR=1.16 per SD increase in AUC, 95% CI [0.86, 1.57]); this is an exploratory association, not a causal or dose-adjustment-ready conclusion on its own."
+    },
+    {
+      "endpoint": "grade2plus_adverse_event",
+      "endpoint_type": "safety",
+      "model_form": "logistic_weight_adjusted",
+      "exposure_metric": "AUC_0_inf",
+      "converged": true,
+      "n_patients": 240,
+      "n_events": 51,
+      "effect_estimate": 0.002807959592757836,
+      "ci_lower": -0.0016326968063001405,
+      "ci_upper": 0.007248615991815813,
+      "diagnostic_flags": [],
+      "key_finding": "Higher exposure is associated with higher odds of grade>=2 adverse events (OR=1.28 per SD increase in AUC, 95% CI [0.87, 1.88]); this is an exploratory association, not a causal or dose-adjustment-ready conclusion on its own."
+    }
+  ],
+  "diagnostics": {
+    "pk_model_converged": true,
+    "parameter_covariance_valid": true,
+    "predictive_check_passed": false,
+    "major_residual_bias": true,
+    "critical_flags": [
+      "Patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint"
+    ],
+    "warnings": [],
+    "summary": "The selected 1-compartment model converged for 100.0% of patients and failed the simplified in-sample patient-level aggregate predictive check based on fitted individual parameters (not a simulated VPC). 2 of 6 tested covariate effects were clinically material. Exposure-response models converged for all fitted models."
+  },
+  "dosing_recommendations": [
+    {
+      "subgroup": "overall population",
+      "action": "maintain_current_dose",
+      "recommended_dose_mg": 100.0,
+      "reference_dose_mg": 100.0,
+      "evidence_basis": "observed",
+      "rationale": "Current exposure is supported by a positive univariate efficacy log-odds CI [0.004212, 0.01189], while the univariate safety log-odds CI [-0.001765, 0.005141] includes 0 and does not show a significant exposure-related safety signal. Diagnostic context: Patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint",
+      "confidence": "moderate",
+      "validation_required": [
+        "prospective dose-confirmation study",
+        "population PK modeling with full NLME approach",
+        "Patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint"
+      ]
+    },
+    {
+      "subgroup": "patients in the upper weight quartile",
+      "action": "insufficient_evidence",
+      "recommended_dose_mg": null,
+      "reference_dose_mg": 100.0,
+      "evidence_basis": "observed",
+      "rationale": "The exploratory two-stage analysis found an estimated 30.2% increase in CL across the evaluated covariate range. The V effect was also clinically material (30.8% across the evaluated range). Translating this into a specific alternative dose requires exposure-matching simulation, which was not performed here.",
+      "confidence": "low",
+      "validation_required": [
+        "exposure-matching simulation to confirm target AUC maintained across the covariate's range"
+      ]
+    },
+    {
+      "subgroup": "patients across the creatinine clearance range",
+      "action": "no_subgroup_adjustment",
+      "recommended_dose_mg": 100.0,
+      "reference_dose_mg": 100.0,
+      "evidence_basis": "observed",
+      "rationale": "The exploratory two-stage analysis found an estimated 9.3% increase in CL across the evaluated covariate range, which did not meet the prespecified statistical and >=20% clinical-materiality criteria for a subgroup adjustment.",
+      "confidence": "moderate",
+      "validation_required": [
+        "confirmatory population PK covariate assessment"
+      ]
+    },
+    {
+      "subgroup": "patients across mutant-allele count groups",
+      "action": "no_subgroup_adjustment",
+      "recommended_dose_mg": 100.0,
+      "reference_dose_mg": 100.0,
+      "evidence_basis": "observed",
+      "rationale": "The exploratory two-stage analysis found an estimated 9.9% decrease in CL across the evaluated covariate range, which did not meet the prespecified statistical and >=20% clinical-materiality criteria for a subgroup adjustment.",
+      "confidence": "moderate",
+      "validation_required": [
+        "confirmatory population PK covariate assessment"
+      ]
+    }
+  ],
+  "limitations": [
+    "This analysis uses a two-stage approximation rather than a full nonlinear mixed-effects (NLME) population PK model.",
+    "The single studied dose level precludes assessment of dose proportionality.",
+    "Covariate effects are exploratory associations and are not definitive population PK covariates.",
+    "Diagnostic limitations were identified; see the diagnostics section before interpreting the analytical conclusions."
+  ]
+}
