@@ -1,0 +1,5 @@
+n_patients: 240
+dose: 100 mg
+route: IV bolus
+primary_endpoint: clinical response at week 12
+safety_endpoint: adverse event grade 2 or higher
