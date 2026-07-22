@@ -32,6 +32,7 @@ class PKModelComparison(BaseModel):
     candidates: List[PKCandidateResult]
     selected_model: Optional[Literal["1-compartment", "2-compartment"]]
     selection_rationale: str
+    diagnostic_flags: List[str] = []
 
 
 class CovariateEffect(BaseModel):
