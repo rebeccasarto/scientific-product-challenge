@@ -141,3 +141,59 @@ def test_json_schema_instruction_is_embedded(
     assert "JSON schema" in system_message
     assert '"answer"' in system_message
     assert '"score"' in system_message
+
+
+def test_text_call_retries_short_response_and_returns_raw_text(
+    mocked_client: Tuple[MagicMock, Path],
+) -> None:
+    client, log_path = mocked_client
+    valid_text = "# Report\n\nThis is a sufficiently complete Markdown response.\n"
+    client.chat.completions.create.side_effect = [
+        _response("Too short"),
+        _response(valid_text),
+    ]
+
+    result = llm_client.call_text(
+        "Text system prompt",
+        "Text user content",
+        run_id="run-text",
+        agent_name="report_writer",
+    )
+
+    assert result == valid_text
+    retry_messages = client.chat.completions.create.call_args_list[1].kwargs[
+        "messages"
+    ]
+    assert retry_messages[0]["content"] == "Text system prompt"
+    assert retry_messages[1]["content"] == "Text user content"
+    assert len(retry_messages) == 3
+    assert retry_messages[2]["content"].startswith(
+        "Your previous response was invalid"
+    )
+    log_records = [
+        json.loads(line)
+        for line in log_path.read_text(encoding="utf-8").splitlines()
+    ]
+    assert [record["success"] for record in log_records] == [False, True]
+
+
+def test_text_call_exhaustion_raises_runtime_error(
+    mocked_client: Tuple[MagicMock, Path],
+) -> None:
+    client, _ = mocked_client
+    client.chat.completions.create.side_effect = [
+        _response(""),
+        _response("still too short"),
+    ]
+
+    with pytest.raises(RuntimeError) as error:
+        llm_client.call_text(
+            "System",
+            "User",
+            max_attempts=2,
+            run_id="text-failed",
+            agent_name="report_writer",
+        )
+
+    assert "report_writer" in str(error.value)
+    assert "text-failed" in str(error.value)
