@@ -20,6 +20,9 @@ REVISION_CYCLES_LOG_PATH = PROJECT_ROOT / "logs" / "revision_cycles.jsonl"
 RELEASE_DECISION_PATH = (
     PROJECT_ROOT / "results" / "final" / "release_decision.json"
 )
+REVIEWER_DECISION_PATH = (
+    PROJECT_ROOT / "results" / "final" / "reviewer_decision.json"
+)
 
 
 def _log_revision_cycle(run_id: str, reviewer_status: str) -> None:
@@ -82,14 +85,20 @@ def run_reviewed_report(
 ) -> Tuple[str, ReviewerDecision, ReleaseDecision]:
     """Review analytical evidence once, then generate and validate its report."""
     reviewer_decision = run_reviewer(analysis_summary, run_id)
+    REVIEWER_DECISION_PATH.parent.mkdir(parents=True, exist_ok=True)
+    if hasattr(reviewer_decision, "model_dump_json"):
+        reviewer_payload = reviewer_decision.model_dump_json(indent=2)
+    else:
+        reviewer_payload = reviewer_decision.json(indent=2)
+    REVIEWER_DECISION_PATH.write_text(reviewer_payload + "\n", encoding="utf-8")
     release_decision = generate_release_decision(reviewer_decision, run_id)
-    report = run_report_writer(analysis_summary, reviewer_decision, run_id)
     RELEASE_DECISION_PATH.parent.mkdir(parents=True, exist_ok=True)
     if hasattr(release_decision, "model_dump_json"):
         release_payload = release_decision.model_dump_json(indent=2)
     else:
         release_payload = release_decision.json(indent=2)
     RELEASE_DECISION_PATH.write_text(release_payload + "\n", encoding="utf-8")
+    report = run_report_writer(analysis_summary, reviewer_decision, run_id)
     _log_revision_cycle(run_id, reviewer_decision.status)
     return report, reviewer_decision, release_decision
 

@@ -2191,37 +2191,87 @@ vertical-align: -.125em;
 
 <section id="executive-pkpd-report" class="level1">
 <h1>Executive PK/PD Report</h1>
-<section id="executive-recommendation" class="level3">
-<h3 class="anchored" data-anchor-id="executive-recommendation">Executive Recommendation</h3>
-<p>Maintain the current dose of 100 mg for the overall patient population.</p>
+<section id="executive-recommendation" class="level2">
+<h2 class="anchored" data-anchor-id="executive-recommendation">Executive Recommendation</h2>
+<p><strong>Maintain 100 mg dose in the overall population</strong>, with validation required before broad implementation. The current dose is supported by positive efficacy exposure-response (OR=2.02 per SD increase in AUC), but the pharmacokinetic model failed internal predictive checks. Weight-stratified dosing shows promise but requires exposure-matching simulation before dosing guidance can be issued.</p>
+<hr>
 </section>
-<section id="pkpd-findings" class="level3">
-<h3 class="anchored" data-anchor-id="pkpd-findings">PK/PD Findings</h3>
-<p>The selected 1-compartment PK model is supported by 100% convergence of 240 patients. Clearance (CL) estimation is 0.38 L/h and volume (V) estimation is 4.63 L. Critical diagnostics indicated that patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint.</p>
+<section id="pkpd-findings" class="level2">
+<h2 class="anchored" data-anchor-id="pkpd-findings">PK/PD Findings</h2>
+<p><strong>Pharmacokinetics:</strong><br>
+A 1-compartment model fit 240 patients (100% convergence). Population median clearance: 0.38 L/h (IQR 0.30–0.45); volume: 4.6 L (IQR 3.8–5.7).</p>
+<p><strong>Critical Diagnostic Limitation:</strong><br>
+Patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint. This failure indicates the model’s predictive performance does not fully capture observed data patterns and constrains confidence in derived dosing recommendations.</p>
+<p><strong>Exposure-Response (Efficacy):</strong><br>
+Higher AUC is associated with increased clinical response rate (OR=2.02 per SD increase, 95% CI [1.44, 2.82]). Safety signal is absent (grade ≥2 adverse events show no significant AUC relationship; OR=1.16, 95% CI [0.86, 1.57]).</p>
+<hr>
 </section>
-<section id="population-insights" class="level3">
-<h3 class="anchored" data-anchor-id="population-insights">Population Insights</h3>
-<ul>
-<li>For patients in the upper weight quartile, CL increases by approximately 30.2%. Calculating alternative dosing requires exposure-matching simulations, which were not conducted.</li>
-<li>Across the creatinine clearance range, CL shows a 9.3% increase and does not warrant a dosing adjustment.</li>
-<li>No adjustments are necessary based on the mutant allele count, which indicates a 9.9% decrease in CL.</li>
-</ul>
+<section id="population-insights" class="level2">
+<h2 class="anchored" data-anchor-id="population-insights">Population Insights</h2>
+<p><strong>Weight Effect (Clinically Material):</strong><br>
+Clearance increases ~30% across the weight interquartile range (allometric exponent 0.79, 95% CI [0.67, 0.91], p&lt;0.001). Volume shows similar effect (~31%, exponent 0.80, p&lt;0.001).</p>
+<p><strong>Renal Function &amp; Genotype (Not Material):</strong><br>
+Creatinine clearance shows modest CL effect (~9% across IQR, p=0.0001), below the ≥20% clinical-materiality threshold. Genotype effect on CL (~10% difference wild-type to homozygous mutant) is not statistically significant (p=0.081).</p>
+<hr>
 </section>
-<section id="dosing-recommendation" class="level3">
-<h3 class="anchored" data-anchor-id="dosing-recommendation">Dosing Recommendation</h3>
+<section id="dosing-recommendation" class="level2">
+<h2 class="anchored" data-anchor-id="dosing-recommendation">Dosing Recommendation</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 22%">
+<col style="width: 17%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Subgroup</th>
+<th>Action</th>
+<th>Dose</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Overall population</td>
+<td>Maintain</td>
+<td>100 mg</td>
+<td>Positive efficacy; no safety signal. Moderate confidence pending prospective confirmation and full NLME modeling.</td>
+</tr>
+<tr class="even">
+<td>Upper weight quartile</td>
+<td>Under investigation</td>
+<td>TBD</td>
+<td>30% CL increase identified. Exposure-matching simulation required before alternative dose can be specified.</td>
+</tr>
+<tr class="odd">
+<td>Renal impairment</td>
+<td>No adjustment</td>
+<td>100 mg</td>
+<td>Effect magnitude (9%) does not meet adjustment threshold.</td>
+</tr>
+<tr class="even">
+<td>Genetic variants</td>
+<td>No adjustment</td>
+<td>100 mg</td>
+<td>Effect not statistically significant.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="clinical-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="clinical-implementation">Clinical Implementation</h2>
 <ol type="1">
-<li><strong>Overall Population</strong>: Maintain current dose of 100 mg based on efficacy data (OR=2.02 per SD increase in AUC, 95% CI [1.44, 2.82]) without a significant safety signal (CI [-0.001765, 0.005141] includes zero).</li>
-<li><strong>Upper Weight Quartile</strong>: Insufficient evidence for a dosing adjustment due to a lack of simulations.</li>
-<li><strong>Creatinine Clearance &amp; Genotype Groups</strong>: No adjustment recommended; no significant clinical materiality was observed.</li>
+<li><strong>Immediate:</strong> Continue 100 mg in routine use with heightened monitoring.</li>
+<li><strong>For heavy patients:</strong> Apply cautious upward dose titration if efficacy target is not met; do not apply fixed adjustment until validated.</li>
+<li><strong>Validation pathway:</strong> Conduct prospective dose-confirmation study using full population PK modeling to resolve model predictive shortfall.</li>
 </ol>
+<hr>
 </section>
-<section id="clinical-implementation" class="level3">
-<h3 class="anchored" data-anchor-id="clinical-implementation">Clinical Implementation</h3>
-<p>Dosing should continue as is for the overall population while monitoring individual patient responses. Further validation through a prospective dose-confirmation study and population PK modeling using a nonlinear mixed-effects approach is suggested.</p>
-</section>
-<section id="confidence-and-limitations" class="level3">
-<h3 class="anchored" data-anchor-id="confidence-and-limitations">Confidence and Limitations</h3>
-<p>Confidence in recommendations is moderate. This analysis is limited by using a two-stage approximation instead of a full NLME model, and a single dose precludes dose proportionality assessment. Observed covariate effects are exploratory and should be interpreted cautiously given the diagnostic limitations outlined.</p>
+<section id="confidence-and-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="confidence-and-limitations">Confidence and Limitations</h2>
+<p>The recommendation for the overall population carries <strong>moderate confidence</strong> because efficacy exposure-response is positive and safety is not compromised; however, the model’s failure to predict observed median concentrations at all timepoints introduces structural uncertainty that cannot be ignored. Weight-based dosing is low-confidence pending simulation. This analysis used two-stage covariate association, not full NLME; single-dose level prevents assessment of dose proportionality; and all covariate effects remain exploratory rather than established population PK parameters. Release is conditional on acknowledgment of these limitations and commitment to confirmatory studies.</p>
 </section>
 </section>
 

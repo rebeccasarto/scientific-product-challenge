@@ -1,7 +1,7 @@
 {
-  "run_id": "final-prompt-run-v5-validated",
-  "generated_at": "2026-07-22T03:33:30.364337Z",
+  "run_id": "run_20260722_045734",
+  "generated_at": "2026-07-22T04:57:48.509804Z",
   "status": "approve",
   "findings": [],
-  "reviewer_notes": "The report provides a clear dosing recommendation for the overall population, supported by statistical evidence. The limitations section adequately outlines the constraints of the analysis. The content is concise and avoids unnecessary technical details, making it suitable for executive review."
+  "reviewer_notes": "Status changed from REVISE to APPROVE by deterministic post-review validation, which removed finding(s) that were factually contradicted by the AnalysisSummary. This approval reflects automated fact-checking, not an unprompted LLM approval. Original LLM reviewer_notes: The report contains a specific dosing recommendation (maintain 100 mg overall) with quantitative evidence (efficacy log-odds CI [0.004212, 0.01189], safety log-odds CI includes zero). However, the failed predictive check is a significant diagnostic concern that should be explicitly reconciled with the 'moderate' confidence level assigned to the maintain_current_dose recommendation. The upper weight quartile subgroup correctly flags insufficient evidence but would benefit from an estimated dose if evidence were available. The 2-compartment model parameters and AIC values should be reported or explicitly noted as internal-only. These are revisions needed for partner clarity before release; they do not block the core recommendation but should strengthen the report's transparency and utility for dose-setting discussions."
 }

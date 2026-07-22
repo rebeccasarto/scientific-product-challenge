@@ -91,6 +91,11 @@ def test_calls_each_stage_once_in_order_regardless_of_status(
         "RELEASE_DECISION_PATH",
         tmp_path / "release_decision.json",
     )
+    monkeypatch.setattr(
+        orchestrator,
+        "REVIEWER_DECISION_PATH",
+        tmp_path / "reviewer_decision.json",
+    )
 
     orchestrator.run_reviewed_report(summary, "orchestrator-run")
 
@@ -117,6 +122,11 @@ def test_returns_report_and_decision_unmodified(
         "RELEASE_DECISION_PATH",
         tmp_path / "release_decision.json",
     )
+    monkeypatch.setattr(
+        orchestrator,
+        "REVIEWER_DECISION_PATH",
+        tmp_path / "reviewer_decision.json",
+    )
 
     returned_report, returned_decision, returned_release = (
         orchestrator.run_reviewed_report(
@@ -129,6 +139,7 @@ def test_returns_report_and_decision_unmodified(
     assert returned_decision is decision
     assert returned_release.decision == "requires_revision"
     assert returned_release.run_id == "orchestrator-run"
+    assert (tmp_path / "reviewer_decision.json").exists()
 
 
 @pytest.mark.parametrize(

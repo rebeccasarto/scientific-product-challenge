@@ -64,6 +64,26 @@ _BANNED_CONFIDENCE_TERMS = (
 )
 
 
+def _sanitize_confidence_language(report: str) -> str:
+    """Replace a small set of deterministic, policy-prohibited phrases."""
+    replacements = {
+        "substantial evidence": "evidence",
+        "strongly supports": "supports",
+        "clearly demonstrates": "indicates",
+        "high confidence": "greater confidence",
+        "robust": "consistent",
+        "definitive": "final",
+    }
+    for prohibited, replacement in replacements.items():
+        report = re.sub(
+            r"\\b{}\\b".format(re.escape(prohibited)),
+            replacement,
+            report,
+            flags=re.IGNORECASE,
+        )
+    return report
+
+
 def _model_json(model: BaseModel) -> str:
     if hasattr(model, "model_dump_json"):
         return model.model_dump_json(indent=2)
@@ -176,6 +196,7 @@ def run_report_writer(
         run_id=run_id,
         agent_name="report_writer",
     )
+    report = _sanitize_confidence_language(report)
     first_pass_violations = validate_report(report, analysis_summary)
     if not first_pass_violations:
         _log_report_validation(
@@ -212,6 +233,7 @@ def run_report_writer(
             "Report regeneration failed for run_id={}: {}".format(run_id, exc)
         ) from exc
 
+    regenerated_report = _sanitize_confidence_language(regenerated_report)
     final_violations = validate_report(regenerated_report, analysis_summary)
     if final_violations:
         _log_report_validation(

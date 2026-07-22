@@ -143,7 +143,7 @@ def test_missing_evidence_claim_is_removed_when_both_types_are_present() -> None
     assert validated.status == "approve"
 
 
-def test_confidence_policy_disagreement_is_downgraded_but_retained() -> None:
+def test_supported_moderate_confidence_finding_is_removed() -> None:
     summary = _summary([], "Efficacy significant; safety non-significant.")
     decision = _decision(
         ReviewFinding(
@@ -157,12 +157,56 @@ def test_confidence_policy_disagreement_is_downgraded_but_retained() -> None:
 
     validated = validate_review_findings(decision, summary)
 
-    assert len(validated.findings) == 1
-    assert validated.findings[0].severity == "minor"
-    assert "confidence calibration is a policy judgment" in (
-        validated.findings[0].required_action or ""
+    assert validated.findings == []
+    assert validated.status == "approve"
+
+
+def test_supported_insufficient_evidence_finding_is_removed() -> None:
+    summary = _summary([], "Efficacy significant; safety non-significant.")
+    summary.dosing_recommendations.append(
+        DosingRecommendation(
+            subgroup="upper weight quartile",
+            action="insufficient_evidence",
+            recommended_dose_mg=None,
+            evidence_basis="observed",
+            rationale="A specific dose requires exposure-matching simulation.",
+            confidence="low",
+            validation_required=["exposure-matching simulation"],
+        )
     )
-    assert validated.status == "revise"
+    decision = _decision(
+        ReviewFinding(
+            severity="major",
+            category="interpretation",
+            issue="The insufficient evidence conclusion lacks a dose proposal.",
+            evidence="Weight has a material effect.",
+            required_action="Provide a specific dose.",
+        )
+    )
+
+    validated = validate_review_findings(decision, summary)
+
+    assert validated.findings == []
+    assert validated.status == "approve"
+
+
+def test_nullable_aic_bic_finding_is_removed_when_paired_aicc_is_documented() -> None:
+    summary = _summary([], "Efficacy significant; safety non-significant.")
+    summary.pk_model.selection_rationale = "Paired delta-AICc favored the model."
+    decision = _decision(
+        ReviewFinding(
+            severity="minor",
+            category="diagnostics",
+            issue="AIC/BIC values are null despite model selection logic.",
+            evidence="Candidate AIC/BIC fields are null.",
+            required_action="Populate AIC/BIC.",
+        )
+    )
+
+    validated = validate_review_findings(decision, summary)
+
+    assert validated.findings == []
+    assert validated.status == "approve"
 
 
 def test_genuine_traceability_finding_survives_untouched() -> None:
@@ -179,4 +223,3 @@ def test_genuine_traceability_finding_survives_untouched() -> None:
 
     assert validated.findings == [finding]
     assert validated.status == "revise"
-

@@ -3,7 +3,10 @@
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
+import shutil
+import subprocess
 import sys
+import tempfile
 from typing import List, Optional
 
 from agents.schemas import AnalysisSummary
@@ -20,6 +23,32 @@ from pipeline.validation import raise_if_errors, validate
 PROJECT_ROOT = Path(__file__).resolve().parent
 ANALYSIS_SUMMARY_PATH = PROJECT_ROOT / "results" / "final" / "analysis_summary.json"
 PARTNER_REPORT_PATH = PROJECT_ROOT / "results" / "final" / "partner_report.md"
+RENDERED_REPORT_PATH = PROJECT_ROOT / "results" / "final" / "report.html"
+
+
+def _render_partner_report() -> None:
+    """Render the final Markdown report safely through Quarto when available."""
+    if shutil.which("quarto") is None:
+        raise RuntimeError("Quarto is required to render results/final/report.html")
+
+    with tempfile.TemporaryDirectory(prefix="pkpd-report-") as temporary_dir:
+        subprocess.run(
+            [
+                "quarto",
+                "render",
+                "report.qmd",
+                "--output-dir",
+                temporary_dir,
+            ],
+            cwd=PROJECT_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        rendered_file = Path(temporary_dir) / "report.html"
+        if not rendered_file.exists():
+            raise RuntimeError("Quarto completed without producing report.html")
+        shutil.copy2(rendered_file, RENDERED_REPORT_PATH)
 
 
 def _input_file_paths(resolved_data_dir: str) -> List[str]:
@@ -143,10 +172,12 @@ def run_analysis(
                 effective_run_id,
             )
             PARTNER_REPORT_PATH.write_text(report, encoding="utf-8")
+            _render_partner_report()
             produced_files.extend(
                 [
                     "results/final/release_decision.json",
                     "results/final/partner_report.md",
+                    "results/final/report.html",
                 ]
             )
             print("Reviewer status: {}".format(reviewer_decision.status))

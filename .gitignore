@@ -5,3 +5,6 @@ venv/
 .venv/
 *.egg-info/
 .DS_Store
+
+/.quarto/
+**/*.quarto_ipynb
