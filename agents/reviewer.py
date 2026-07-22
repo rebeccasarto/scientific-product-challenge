@@ -58,9 +58,9 @@ def run_reviewer(
     analysis_summary: AnalysisSummary,
     run_id: str,
 ) -> ReviewerDecision:
-    """Ask the reviewer for a schema-validated scientific decision."""
+    """Ask for a decision while retaining local control of its provenance."""
     system_prompt = REVIEWER_PROMPT_PATH.read_text(encoding="utf-8")
-    return cast(
+    decision = cast(
         ReviewerDecision,
         call_structured(
             system_prompt=system_prompt,
@@ -70,6 +70,13 @@ def run_reviewer(
             agent_name="reviewer",
         ),
     )
+    provenance = {
+        "run_id": run_id,
+        "generated_at": datetime.now(timezone.utc),
+    }
+    if hasattr(decision, "model_copy"):
+        return decision.model_copy(update=provenance)
+    return decision.copy(update=provenance)
 
 
 if __name__ == "__main__":
