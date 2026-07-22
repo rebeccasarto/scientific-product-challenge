@@ -32,6 +32,7 @@ The workflow writes these final deliverables under `results/final/`:
 - `reviewer_decision.json`
 - `release_decision.json`
 - `partner_report.md`
+- `partner_decision_memo.md`
 - `report.html`
 - `planner_output.json`
 - `spend_report.json`
