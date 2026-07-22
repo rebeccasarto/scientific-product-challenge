@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-07-22T18:22:43.580497+00:00",
+  "usage_source": "logs/llm_calls.jsonl",
+  "pricing_source": "https://openrouter.ai/anthropic/claude-haiku-4.5/pricing",
+  "pricing_verified_on": "2026-07-22",
+  "estimate_note": "This is a conservative list-price estimate from logged token usage, not an OpenRouter invoice. It excludes cache discounts and any provider-specific adjustments.",
+  "attempts": 34,
+  "models": {
+    "anthropic/claude-haiku-4.5": {
+      "attempts": 34,
+      "input_tokens": 138446,
+      "output_tokens": 31841,
+      "input_price_usd_per_million": 1.0,
+      "output_price_usd_per_million": 5.0,
+      "estimated_list_cost_usd": 0.297651
+    }
+  },
+  "estimated_total_list_cost_usd": 0.297651,
+  "challenge_spend_cap_usd": 20.0,
+  "within_challenge_cap": true
+}

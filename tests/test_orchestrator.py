@@ -10,6 +10,7 @@ import agents.orchestrator as orchestrator
 from agents.schemas import (
     AnalysisSummary,
     DiagnosticsSummary,
+    DosingRecommendation,
     PKModelComparison,
     ReviewFinding,
     ReviewerDecision,
@@ -111,6 +112,28 @@ def test_critical_diagnostic_blocks_ready_to_send() -> None:
     assert release.decision == "requires_revision"
     assert release.outstanding_risks == ["[diagnostics] Predictive check failed."]
     assert "not ready_to_send" in release.justification
+
+
+def test_missing_exposure_matching_simulation_blocks_ready_to_send() -> None:
+    summary = _summary()
+    summary.dosing_recommendations = [
+        DosingRecommendation(
+            subgroup="upper weight quartile",
+            action="insufficient_evidence",
+            recommended_dose_mg=None,
+            evidence_basis="observed",
+            rationale="A specific dose requires exposure-matching simulation.",
+            confidence="low",
+            validation_required=["exposure-matching simulation"],
+        )
+    ]
+
+    release = orchestrator.generate_release_decision(
+        _decision("approve"), summary, "controlled-run"
+    )
+
+    assert release.decision == "requires_revision"
+    assert "No exposure-matching dose simulation" in release.justification
 
 
 @pytest.mark.parametrize(

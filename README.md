@@ -33,6 +33,8 @@ The workflow writes these final deliverables under `results/final/`:
 - `release_decision.json`
 - `partner_report.md`
 - `report.html`
+- `planner_output.json`
+- `spend_report.json`
 
 ## API
 
@@ -57,8 +59,13 @@ curl -X POST http://127.0.0.1:8000/recommend \
 
 ```bash
 docker build -t pkpd-analysis .
+docker run --rm --env-file .env pkpd-analysis python run_pkpd_analysis.py
 docker run --rm -p 8000:8000 pkpd-analysis
 ```
+
+The image includes pinned Quarto so the complete workflow can render HTML.
+The `.env` file is excluded from the Docker build context; pass it only at run
+time when executing OpenRouter calls.
 
 ## Architecture
 
@@ -83,11 +90,12 @@ docker run --rm -p 8000:8000 pkpd-analysis
 
 The workflow uses OpenRouter's OpenAI-compatible API and requires
 `OPENROUTER_API_KEY`. Usage metadata is recorded in `logs/llm_calls.jsonl`;
-do not commit `.env` credentials.
+do not commit `.env` credentials. Each workflow run writes a conservative
+list-price estimate to `results/final/spend_report.json`; it is based on token
+usage, not an invoice, and documents the price source and $20 challenge cap.
 
 ## Coding-agent usage
 
-Coding agents were used to scaffold the workflow, implement and test the PK,
-covariate, exposure-response, diagnostic, API, and agent-validation layers,
-and review generated artifacts for submission readiness. The commit history
-preserves the resulting implementation steps and decisions.
+See [prompt-development evidence](docs/prompt_development.md) for the
+baseline/final prompt comparison, four material coding-agent prompts, their
+implementation outcomes, and the evidence used to evaluate final prompts.

@@ -1,70 +1,64 @@
-# Executive Recommendation
+# Executive PK/PD Report
 
-**Maintain 100 mg at moderate confidence.**
+## Executive Recommendation
 
-The current dose is supported by a significant positive exposure-response association for efficacy paired with a non-significant safety signal. However, a critical diagnostic limitation—patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint—prevents higher confidence. Prospective confirmation is required before finalizing this recommendation.
+**Maintain the current dose of 100 mg** in the overall population with **moderate confidence**.
+
+This recommendation is supported by a statistically significant positive exposure-response relationship for efficacy, coupled with a non-significant safety signal across the exposure range observed in this study. However, a critical diagnostic limitation (see below) prevents higher confidence and requires prospective validation.
 
 ---
 
 ## PK/PD Findings
 
-**Efficacy exposure-response:**  
-Higher AUC is associated with higher odds of clinical response (univariate OR = 2.02 per standard deviation increase in AUC, 95% CI [1.44, 2.82]). This is an exploratory association grounded in the current dataset.
+### Pharmacokinetics
+A 1-compartment model was selected, converging successfully in 100% of patients (n=240). The population median clearance was 0.38 L/h (interquartile range [IQR]: 0.30–0.45 L/h), and median volume of distribution was 4.63 L (IQR: 3.81–5.72 L).
 
-**Safety exposure-response:**  
-Higher AUC shows no statistically significant relationship with grade ≥2 adverse events (univariate OR = 1.16 per SD increase in AUC, 95% CI [0.86, 1.57], 95% CI includes 1.0). No clear exposure-related safety signal emerged at current exposure levels.
+Weight exerts a clinically material allometric effect on both clearance (+30.2% across the IQR; 95% CI [0.67, 0.91]) and volume (+30.8% across the IQR; 95% CI [0.71, 0.89]). Creatinine clearance showed a smaller, non-material effect on clearance (+9.3% across the IQR). Genotype effects were exploratory associations and did not meet materiality thresholds.
 
-**PK structure:**  
-A 1-compartment model was selected (67.1% of patients showed no clear two-compartment support). Population clearance (CL) median = 0.381 L/h; volume of distribution (V) median = 4.63 L. Both parameters show substantial between-patient variability (CL IQR: 0.298–0.454 L/h; V IQR: 3.81–5.72 L).
+### Efficacy–Exposure Relationship
+Higher AUC was associated with higher odds of clinical response in both univariate (OR = 2.02 per SD increase, 95% CI [1.44, 2.82]) and weight-adjusted (OR = 1.84 per SD, 95% CI [1.23, 2.76]) models. This exploratory association supports efficacy benefit at current exposure levels.
+
+### Safety–Exposure Relationship
+Higher AUC showed a non-significant association with grade ≥2 adverse events in both univariate (OR = 1.16 per SD, 95% CI [0.86, 1.57]) and weight-adjusted (OR = 1.28 per SD, 95% CI [0.87, 1.88]) models. The confidence intervals include 1.0, indicating no statistically significant exposure-related safety signal at the observed exposure range.
 
 ---
 
 ## Population Insights
 
-**Weight effect on clearance and volume:**  
-Across the interquartile weight range, CL increases by approximately 30.2% (exploratory two-stage association, p < 0.001) and V increases by approximately 30.8% (p < 0.001). Both were flagged as clinically material.
-
-**Renal function effect:**  
-Across the interquartile creatinine clearance range, CL increases by approximately 9.3% (exploratory, p = 0.0001), below the ≥20% clinical-materiality threshold.
-
-**Genetic effect:**  
-Each additional mutant allele is associated with approximately 5.1% lower CL (p = 0.081, not significant); genotype did not meet material effect criteria for dosing adjustment.
+Covariate effects identified in this exploratory two-stage analysis were not assessed as material enough to warrant dose adjustment at this time, with the exception of weight. Patients in the upper weight quartile show substantially higher clearance; however, translating this into a specific alternative dose requires exposure-matching simulation, which was not performed.
 
 ---
 
-## Dosing Recommendations
+## Dosing Recommendation
 
-| Subgroup | Action | Dose | Confidence |
-|----------|--------|------|-----------|
-| Overall population | Maintain current dose | 100 mg | Moderate |
-| Upper weight quartile | Insufficient evidence | — | Low |
-| Creatinine clearance range | No subgroup adjustment | 100 mg | Moderate |
-| Mutant-allele groups | No subgroup adjustment | 100 mg | Moderate |
-
-**Overall population (moderate confidence):**  
-Maintain 100 mg. Efficacy exposure-response is statistically significant; safety exposure-response does not reach statistical significance and does not contradict efficacy at current exposure. Moderate confidence reflects the diagnostic limitation noted below.
-
-**Upper weight quartile (low confidence):**  
-Insufficient evidence to justify a specific alternative dose. The observed ~30% clearance increase could necessitate dose adjustment to maintain target AUC, but translation into a numeric recommendation requires exposure-matching simulation, which was not performed.
-
-**Creatinine clearance range (moderate confidence):**  
-No subgroup adjustment. The ~9.3% CL effect does not meet the ≥20% clinical-materiality threshold for dosing action.
-
-**Mutant-allele groups (moderate confidence):**  
-No subgroup adjustment. The ~9.9% CL effect does not meet the ≥20% clinical-materiality threshold for dosing action.
+| Subgroup | Action | Confidence | Rationale |
+|----------|--------|------------|-----------|
+| **Overall population** | Maintain 100 mg | Moderate | Positive univariate efficacy log-odds CI [0.004, 0.012]; non-significant univariate safety log-odds CI [−0.002, 0.005]. Diagnostic limitation noted (see below). |
+| **Upper weight quartile** | Insufficient evidence | Low | Estimated 30.2% CL increase. Exposure-matching simulation required to justify a specific alternative dose. |
+| **Creatinine clearance range** | No adjustment | Moderate | Estimated 9.3% CL increase did not meet ≥20% materiality threshold. |
+| **Mutant-allele groups** | No adjustment | Moderate | Estimated 9.9% CL decrease did not meet ≥20% materiality threshold. |
 
 ---
 
 ## Clinical Implementation
 
-Prescribe 100 mg to all patients in the current population. For patients in the upper weight quartile, consider enrollment in a prospective exposure-confirmation study to determine whether dose adjustment maintains therapeutic AUC; do not adjust dose empirically at this time.
+The current 100 mg dose may be continued in routine practice for the overall population and for patients across the creatinine clearance and genotype ranges studied.
+
+For patients in the upper weight quartile, there is insufficient evidence to recommend a specific alternative dose at this time. Such patients should be monitored for efficacy and safety per standard practice, pending further exposure-matching work.
 
 ---
 
 ## Confidence and Limitations
 
-This analysis is based on a two-stage approximation rather than a full nonlinear mixed-effects population PK model. The single studied dose level (100 mg) precludes assessment of dose proportionality or dose-response relationships; exposure variation reflects between-patient differences in clearance, not different administered doses.
+**Confidence is moderate, not higher, because:**  
+Patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint. This failure of an in-sample predictive check indicates that the 1-compartment model does not capture all relevant PK dynamics and introduces uncertainty around exposure predictions, particularly for dose individualization.
 
-**Critical diagnostic limitation:** Patient-level aggregate median predictions were not within 20% of observed medians at every scheduled timepoint. This shortfall indicates the fitted model does not capture all salient PK behavior and suggests that prospective dose-confirmation in a controlled setting is warranted before full implementation.
+**Additional limitations:**
+- This analysis used a two-stage approximation rather than a full nonlinear mixed-effects (NLME) population PK model.
+- Only one dose level (100 mg) was administered; there is no dose-response data, only exposure-response data arising from inter-individual clearance differences.
+- Covariate effects are exploratory associations and are not population PK covariates confirmed by prospective study design.
 
-Covariate effects are exploratory associations and are not population PK covariates in the classical sense; they require confirmation by population PK modeling using full nonlinear mixed-effects methodology.
+**Validation required:**
+- Prospective dose-confirmation study
+- Full NLME population PK model
+- Exposure-matching simulation for weight-based subgroup dosing (if pursued)

@@ -60,8 +60,17 @@ def generate_release_decision(
         for severity in ("critical", "major", "minor")
     }
     critical_diagnostics = list(analysis_summary.diagnostics.critical_flags)
+    simulation_gaps = [
+        recommendation
+        for recommendation in analysis_summary.dosing_recommendations
+        if recommendation.action == "insufficient_evidence"
+        and any(
+            "simulation" in text.casefold()
+            for text in [recommendation.rationale] + recommendation.validation_required
+        )
+    ]
     mapped_decision = decision_by_status[reviewer_decision.status]
-    if critical_diagnostics and mapped_decision == "ready_to_send":
+    if (critical_diagnostics or simulation_gaps) and mapped_decision == "ready_to_send":
         mapped_decision = "requires_revision"
 
     justification = (
@@ -80,11 +89,21 @@ def generate_release_decision(
     outstanding_risks.extend(
         "[diagnostics] {}".format(flag) for flag in critical_diagnostics
     )
+    outstanding_risks.extend(
+        "[dosing] {} requires exposure-matching simulation before a specific "
+        "alternative dose can be supported.".format(recommendation.subgroup)
+        for recommendation in simulation_gaps
+    )
     if critical_diagnostics:
         justification += (
             " Release is not ready_to_send because {} unresolved critical "
             "diagnostic flag(s) remain."
         ).format(len(critical_diagnostics))
+    if simulation_gaps:
+        justification += (
+            " No exposure-matching dose simulation supports a specific "
+            "alternative dose for {} subgroup(s)."
+        ).format(len(simulation_gaps))
     return ReleaseDecision(
         run_id=run_id,
         generated_at=datetime.now(timezone.utc),

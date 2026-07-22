@@ -18,6 +18,7 @@ from pipeline.dosing import generate_dosing_recommendations
 from pipeline.eda import run_eda
 from pipeline.exposure_response import fit_exposure_response
 from pipeline.pk import fit_population_pk
+from pipeline.spend import write_spend_report
 from pipeline.validation import raise_if_errors, validate
 
 
@@ -26,6 +27,7 @@ ANALYSIS_SUMMARY_PATH = PROJECT_ROOT / "results" / "final" / "analysis_summary.j
 PARTNER_REPORT_PATH = PROJECT_ROOT / "results" / "final" / "partner_report.md"
 RENDERED_REPORT_PATH = PROJECT_ROOT / "results" / "final" / "report.html"
 PLANNER_OUTPUT_PATH = PROJECT_ROOT / "results" / "final" / "planner_output.json"
+SPEND_REPORT_PATH = PROJECT_ROOT / "results" / "final" / "spend_report.json"
 
 
 def _render_partner_report() -> None:
@@ -220,6 +222,14 @@ def run_analysis(
                 "results only: {}".format(exc),
                 file=sys.stderr,
             )
+
+    spend_report = write_spend_report(SPEND_REPORT_PATH)
+    produced_files.append("results/final/spend_report.json")
+    print(
+        "Estimated OpenRouter list-price spend: ${:.6f}".format(
+            spend_report["estimated_total_list_cost_usd"]
+        )
+    )
 
     material_count = sum(
         effect.clinically_material for effect in covariate_effects

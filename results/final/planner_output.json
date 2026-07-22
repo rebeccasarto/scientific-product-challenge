@@ -11,13 +11,13 @@
   "efficacy_endpoint": "clinical_response",
   "safety_endpoint": "grade2plus_adverse_event",
   "validation_checks": [
-    "PK model selection via OFV, AIC, and visual inspection of goodness-of-fit plots",
-    "Data completeness and outlier assessment for concentration-time, PD biomarker, covariates, and endpoints",
-    "Covariate screening via univariate Wald test (p<0.05 inclusion threshold); retain only covariates with statistically significant exposure relationships",
-    "Predictive check: simulated 90% prediction interval vs observed concentration-time data across dose range",
-    "Predictive check: simulated 90% prediction interval vs observed PD biomarker and endpoint distributions",
-    "Uncertainty quantification via bootstrap resampling (n=200) of point estimates and confidence intervals for PK/PD parameters",
-    "Post-hoc individual parameter estimation and shrinkage assessment for all final model parameters"
+    "Data quality: verify no missing concentration-time pairs, covariate completeness, and endpoint classification consistency",
+    "PK model selection: compare 1- and 2-compartment fits using OFV, AIC, and visual predictive checks; confirm parameter identifiability",
+    "Covariate screening: test weight_kg, creatinine_clearance_ml_min, and genotype individually on PK parameters; document effect sizes and statistical significance",
+    "Exposure-response relationship: confirm AUC derivation from selected PK model and assess linearity of clinical_response and grade2plus_adverse_event against AUC",
+    "Predictive performance: generate posterior predictive checks for PK concentrations and compare observed vs. model-predicted efficacy and safety rates by AUC quartile",
+    "Uncertainty quantification: report parameter estimates with 95% confidence intervals and sensitivity analysis for key covariate effects",
+    "Population heterogeneity: assess residual variability and inter-individual PK variability after covariate adjustment"
   ],
-  "dosing_policy": "Conservative dosing recommendation derived exclusively from the final PK/PD model fitted to the study population. Any covariate identified as material to exposure without supporting exposure-matched simulation data shall result in a declaration of insufficient evidence for dose adjustment, rather than an invented alternative dose. Recommend fixed 100 mg IV bolus pending accumulation of evidence specific to dose-covariate interactions."
+  "dosing_policy": "Conservative dosing recommendations require both exposure-matched simulation and statistically significant covariate effects from the final PK/PD model. A material covariate identified during screening but lacking exposure-matched simulation or conflicting with efficacy-safety balance will be classified as insufficient evidence; no dose adjustment will be proposed for such covariates. Dosing guidance is limited to the observed dose level (100 mg IV bolus) and target AUC ranges derived from the validated exposure-response analysis."
 }
