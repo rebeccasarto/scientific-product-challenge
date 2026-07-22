@@ -468,6 +468,7 @@ def fit_population_pk(loaded: LoadedData) -> Tuple[PKModelComparison, pd.DataFra
         two_fit = fit_two_compartment_patient(times, concentrations, dose_mg)
         for fit in (one_fit, two_fit):
             fit["patient_id"] = str(patient_id)
+            fit["dose_mg"] = float(loaded["metadata"]["dose_mg"])
             fit_records.append(fit)
         paired_fits.append((one_fit, two_fit))
 
@@ -542,8 +543,10 @@ def fit_population_pk(loaded: LoadedData) -> Tuple[PKModelComparison, pd.DataFra
         "aicc",
         "diagnostic_flags",
         "predicted_concentrations",
+        "dose_mg",
     ]
     per_patient_output = per_patient[output_columns].copy()
+    per_patient_output.attrs["dose_mg"] = float(loaded["metadata"]["dose_mg"])
     candidates = [
         _candidate_result(
             model_type,
